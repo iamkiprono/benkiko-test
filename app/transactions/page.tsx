@@ -31,29 +31,22 @@ export default function TransactionsPage() {
 
     const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-    const getWalletTransactions = async (walletLocator: string) => {
-        if (!walletLocator) return;
+   const getWalletTransactions = async (walletLocator: string) => {
+  if (!walletLocator) return;
 
-        const url = `https://staging.crossmint.com/api/2025-06-09/wallets/${walletLocator}/transactions`;
+  try {
+    const response = await fetch(`/api/transactions?wallet=${walletLocator}`);
+    const data = await response.json();
 
-        try {
-            const response = await fetch(url, {
-                method: "GET",
-                headers: {
-                    "X-API-KEY": process.env.NEXT_PUBLIC_CROSSMINT_API_KEY ?? "",
-                },
-            });
+    console.log({ data });
 
-            const data = await response.json();
-            console.log({ data });
-
-            if (data?.transactions) {
-                setTransactions(data.transactions as Transaction[]);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    if (data?.transactions) {
+      setTransactions(data.transactions as Transaction[]);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 
     useEffect(() => {
         getWalletTransactions(wallet?.address ?? "");
