@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const walletLocator = searchParams.get("wallet");
-
+console.log({walletLocator})
   if (!walletLocator) {
     return NextResponse.json({ error: "Wallet address is required" }, { status: 400 });
   }
@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
       {
         method: "GET",
         headers: {
-          "X-API-KEY": process.env.CROSSMINT_API_KEY ?? "",
+          "X-API-KEY": process.env.NEXT_SERVER_CROSSMINT_API_KEY ?? "",
         },
       }
     );
