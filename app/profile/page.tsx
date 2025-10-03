@@ -16,8 +16,7 @@ export default function User() {
             <p>User ID: {user.id}</p>
             <p>Email: {user.email}</p>
             <p>Phone Number: {user.phoneNumber}</p>
-            <p>Google Name: {user.google?.name}</p>
-            <p>Google Picture: {user.google?.picture}</p>
+
             <p>Farcaster FID: {user.farcaster?.fid}</p>
             <p>Farcaster Username: {user.farcaster?.username}</p>
             <p>Farcaster Bio: {user.farcaster?.bio}</p>

@@ -12,6 +12,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             <CrossmintAuthProvider>
                 <CrossmintWalletProvider
                     createOnLogin={{
+                        // @ts-expect-error -- types are wrong here
                         chain: "evm",
                         signer: {
                             type: "email",

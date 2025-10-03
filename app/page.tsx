@@ -11,7 +11,7 @@ export default function AuthButton() {
   console.log({user})
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6 w-full">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 space-y-6">
         <div className="flex justify-between items-center">
           {user == null ? (
