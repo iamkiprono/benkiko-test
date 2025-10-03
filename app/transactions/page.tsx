@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
 import { useWallet } from "@crossmint/client-sdk-react-ui";
 import { useEffect, useState } from "react";
+import UserCard from "../app-components/UserCard";
 
 // Define types for transaction structure
 interface Transaction {
@@ -54,7 +55,10 @@ export default function TransactionsPage() {
 
     if (!transactions || transactions.length === 0) {
         return (
-            <div className="p-6 bg-yellow-50 min-h-screen flex items-center justify-center w-full">
+            <div className="p-6 bg-yellow-50 min-h-screen flex items-center justify-center w-full relative">
+<div className="absolute top-6 right-6 ">
+        <UserCard/>
+      </div>
                 <p className="text-yellow-700 text-xl font-semibold">
                     No transactions available.
                 </p>
@@ -63,7 +67,10 @@ export default function TransactionsPage() {
     }
 
     return (
-        <div className="p-6 bg-yellow-50 min-h-screen w-full">
+        <div className="p-6 bg-yellow-50 min-h-screen w-full relative">
+            <div className="absolute top-6 right-6 ">
+                    <UserCard/>
+                  </div>
             <h1 className="text-3xl font-bold text-yellow-700 mb-6">
                 Transactions
             </h1>

@@ -15,7 +15,7 @@ const UserCard = () => {
         {user &&
 
             <button onClick={logout} className="bg-[var(--color-accent)] text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-900 transition">
-          Sign Out : {user?.email}
+           {user?.email}
         </button>
         }
     </div>

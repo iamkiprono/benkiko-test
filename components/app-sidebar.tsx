@@ -44,11 +44,11 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className=" text-lg font-bold flex gap-2 items-center space-x-2">
+          <SidebarGroupLabel className=" text-lg font-bold flex gap-2 items-center space-x-2 p-2">
             <img src="Benkiko-logo 1.png" alt="" />
             Benkiko DAO
             </SidebarGroupLabel>
-          <SidebarGroupContent>
+          <SidebarGroupContent className="mt-10">
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
