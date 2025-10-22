@@ -15,7 +15,7 @@ export default function AuthButton() {
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6 w-full relative">
       <div className="absolute top-6 right-6 ">
         {/* <UserCard/> */}
-        Wallet: {wallet ? wallet.address : "Not connected"}
+       <UserCard/>
       </div>
       {!user && status ==="not-loaded" ? "User loading" :
         <Home walletAddress={wallet?.address} />

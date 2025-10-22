@@ -79,10 +79,6 @@ export default function Home({ walletAddress }: { walletAddress?: string }) {
                             <AvatarImage src="/avatars/matt.png" alt="matt" />
                             <AvatarFallback>M</AvatarFallback>
                         </Avatar>
-                        <div className="flex flex-col">
-                            {/* <span className="font-medium text-sm">matt@benkiko.io</span> */}
-                            <UserCard />
-                        </div>
                     </div>
                 </div>
             </div>
