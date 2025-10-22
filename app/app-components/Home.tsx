@@ -8,6 +8,7 @@ import UserCard from "./UserCard"
 import React from "react"
 import { getWalletBalance } from "../actions/actions"
 import { WalletTypes } from "../types/types"
+import { useWallet } from "@crossmint/client-sdk-react-ui"
 
 const data = [
     { name: "1", value: 30000 },
@@ -32,25 +33,30 @@ export default function Home({ walletAddress }: { walletAddress?: string }) {
 
     const [walletBalance, setWalletBalances] = React.useState<WalletTypes[] | null>(null);
 
+    const { wallet, status } = useWallet();
+
+
     const getWalletData = async () => {
-        console.log("Fetching wallet data for:", walletAddress);
-        const res = await getWalletBalance(walletAddress ?? "")
-        if (res.success) {
-            setWalletBalances(res.data);
+        console.log("Fetching wallet data for:", wallet?.address);
+        const res = await fetch(`/api/wallet-balance?address=${wallet?.address}`);
+        const data = await res.json();
+        if (res.ok) {
+            setWalletBalances(data.data);
         } else {
-            alert(res.error)
+            // alert(data.error)
+            console.error("Error fetching wallet balance:", data.error);
         }
     }
 
 
     React.useEffect(() => {
-        if (!walletAddress) {
+        if (status === "not-loaded") {
 
             return;
         } else {
             getWalletData();
         }
-    }, [walletAddress]);
+    }, [status]);
 
 
 
@@ -59,7 +65,7 @@ export default function Home({ walletAddress }: { walletAddress?: string }) {
     return (
         <div className="flex flex-col gap-6 p-6 bg-gray-50 min-h-screen w-full">
             {/* Top Section */}
-            WalletState: {walletAddress}
+            {/* WalletState: {walletAddress} */}<br/>
             <div className="flex justify-between items-center w-full">
                 <div>
                     <p className="text-gray-500 text-sm">Total Balance</p>

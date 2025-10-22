@@ -1,7 +1,6 @@
 "use client";
 
 import { useAuth } from "@crossmint/client-sdk-react-ui";
-import Link from "next/link"
 
 
 export default function AuthButton() {
@@ -17,8 +16,8 @@ export default function AuthButton() {
         {/* <UserCard/> */}
        <UserCard/>
       </div>
-      {!user && status ==="not-loaded" ? "User loading" :
-        <Home walletAddress={wallet?.address} />
+      {!user && status ==="not-loaded" ? <div className="animate-spin"><Loader2Icon/></div> :
+        <Home  />
       }
 
     </div>
@@ -26,8 +25,9 @@ export default function AuthButton() {
 }
 
 import { useWallet } from "@crossmint/client-sdk-react-ui";
-import UserCard from "./app-components/UserCard";
+import { Loader2Icon } from "lucide-react";
 import Home from "./app-components/Home";
+import UserCard from "./app-components/UserCard";
 
 export function Wallet() {
   const { wallet, status } = useWallet();
