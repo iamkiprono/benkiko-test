@@ -18,7 +18,7 @@ export default function Transact() {
   const [token, setToken] = useState("")
   const [recipient, setRecipient] = useState("")
   const [amount, setAmount] = useState("")
-const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const transferToken = async () => {
     try {
       setLoading(true);
@@ -30,7 +30,8 @@ const [loading, setLoading] = useState(false);
         body: JSON.stringify({
           walletLocator: crossmintWallet?.address,
           tokenLocator: `chain:currency:${token}`,
-          recipient,
+          // check if email
+          recipient: recipient.includes("@") ? `email:${recipient}` : recipient.includes("+") ? `phone:${recipient}` : recipient,
           signer: crossmintWallet?.address,
           amount,
           memo: { type: "text", value: "Hello, world!" },
@@ -93,7 +94,7 @@ const [loading, setLoading] = useState(false);
       <Card className="w-full max-w-xl p-6 rounded-2xl shadow-sm bg-white mx-auto">
         <CardContent className="space-y-6">
           {/* Wallet Locator */}
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label htmlFor="wallet">Wallet Locator (Address, Email, or Phone)</Label>
             <Input
               id="wallet"
@@ -103,7 +104,7 @@ const [loading, setLoading] = useState(false);
               className="py-6 text-base"
               disabled={!!crossmintWallet?.address}
             />
-          </div>
+          </div> */}
 
           {/* Token Locator */}
           <div className="space-y-2">
@@ -123,7 +124,7 @@ const [loading, setLoading] = useState(false);
 
           {/* Recipient Locator */}
           <div className="space-y-2">
-            <Label htmlFor="recipient">Recipient Locator</Label>
+            <Label htmlFor="recipient">Recipient Locator (Address, Email, or Phone)</Label>
             <Input
               id="recipient"
               placeholder="Enter recipient ID or reference"
@@ -154,7 +155,7 @@ const [loading, setLoading] = useState(false);
                 Max
               </Button>
             </div>
-            <p className="text-xs text-gray-500">Balance = 12,500.00 KSH</p>
+            {/* <p className="text-xs text-gray-500">Balance = 12,500.00 KSH</p> */}
           </div>
 
           {/* Send Button */}
