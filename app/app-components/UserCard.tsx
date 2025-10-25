@@ -2,24 +2,36 @@
 import React from 'react'
 import { useAuth } from "@crossmint/client-sdk-react-ui";
 import { Button } from '@/components/ui/button';
+import MenuBar from './MenuBar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const UserCard = () => {
-  const { login, logout, user, jwt } = useAuth();
+  const { login, logout, user, jwt, status } = useAuth();
 
   return (
     <div>
-         {!user &&  <Button 
-         onClick={login}
-         
-        className="bg-yellow-500 text-white ">
-          Sign In
-        </Button>}
-        {user &&
+      {!user && <Button
+        onClick={login}
 
-            <Button onClick={logout} className="bg-[var(--color-accent)] ">
-           {user?.email}
-        </Button>
-        }
+        className="bg-yellow-500 text-white ">
+        {status === "initializing" ? "Loading..." : "Sign In"}
+      </Button>}
+      {user &&
+        (
+          <div className='flex gap-2'>
+            <MenuBar>
+              <Avatar>
+                <AvatarImage src="/avatars/matt.png" alt="matt" />
+                <AvatarFallback>{user.email?.split("")[0].toUpperCase()}</AvatarFallback>
+              </Avatar>
+            </MenuBar>
+            <Button className="bg-[var(--color-accent)] ">
+              {user?.email}
+            </Button>
+          </div>
+
+        )
+      }
     </div>
   )
 }

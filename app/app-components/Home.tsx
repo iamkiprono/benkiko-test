@@ -9,6 +9,7 @@ import React from "react"
 import { getWalletBalance } from "../actions/actions"
 import { WalletTypes } from "../types/types"
 import { useWallet } from "@crossmint/client-sdk-react-ui"
+import Link from "next/link"
 
 const data = [
     { name: "1", value: 30000 },
@@ -105,15 +106,18 @@ export default function Home({ walletAddress }: { walletAddress?: string }) {
             </Card>
 
             {/* Action Buttons */}
-            <div className="flex gap-4 justify-start">
+            <div className="flex gap-4 justify-center">
                 <ActionButton icon={<Download size={24} />} label="Deposit" active />
+               <Link href={"/send"}>
                 <ActionButton icon={<Send size={24} />} label="Send" />
+               </Link>
+               
                 <ActionButton icon={<Repeat size={24} />} label="Request" />
                 <ActionButton icon={<Upload size={24} />} label="Withdraw" />
             </div>
 
             {/* Growth + Activity Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 W-w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
                 {/* Growth Chart */}
                 {/* <Card className="rounded-2xl shadow-sm">
           <CardHeader>

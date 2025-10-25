@@ -6,6 +6,7 @@ import { Providers } from "./providers/Providers"
 import Navbar from "./app-components/Navbar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
+import { Toaster } from "sonner";
 
 
 const geistSans = Geist({
@@ -30,8 +31,8 @@ export default function RootLayout({
 }>) {
   return (
 
-      <html lang="en">
-    <SidebarProvider>
+    <html lang="en">
+      <SidebarProvider>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
@@ -42,9 +43,10 @@ export default function RootLayout({
               {children}
             </>
           </Providers>
+      <Toaster position="top-center" richColors={true} duration={10000} closeButton />
         </body>
-    </SidebarProvider>
-      </html>
+      </SidebarProvider>
+    </html>
 
   );
 }
