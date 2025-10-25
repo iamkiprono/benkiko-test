@@ -4,9 +4,16 @@ import { useAuth } from "@crossmint/client-sdk-react-ui";
 import { Button } from '@/components/ui/button';
 import MenuBar from './MenuBar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Loader2Icon } from 'lucide-react';
 
 const UserCard = () => {
   const { login, logout, user, jwt, status } = useAuth();
+
+  if (status === "initializing") {
+    return <>
+      <Loader2Icon className="animate-spin" />
+    </>
+  }
 
   return (
     <div>
@@ -14,7 +21,7 @@ const UserCard = () => {
         onClick={login}
 
         className="bg-yellow-500 text-white ">
-        {status === "initializing" ? "Loading..." : "Sign In"}
+        {status !== "logged-out" ? "Loading..." : "Sign In"}
       </Button>}
       {user &&
         (
