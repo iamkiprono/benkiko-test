@@ -11,9 +11,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <CrossmintProvider apiKey={process.env.NEXT_PUBLIC_CROSSMINT_API_KEY ?? ""}>
             <CrossmintAuthProvider>
                 <CrossmintWalletProvider
+                
                     createOnLogin={{
-                        // @ts-expect-error -- types are wrong here
-                        chain: "evm",
+                        chain: "base-sepolia",
                         signer: {
                             type: "email",
                         },

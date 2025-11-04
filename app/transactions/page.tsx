@@ -1,117 +1,17 @@
-"use client"
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ExternalLink } from "lucide-react";
-import { useWallet } from "@crossmint/client-sdk-react-ui";
-import { useEffect, useState } from "react";
-import UserCard from "../app-components/UserCard";
+import React from 'react'
+import TransactionsPage from '../app-components/Transactions'
+import UserCard from '../app-components/UserCard'
 
-// Define types for transaction structure
-interface Transaction {
-    id: string;
-    status: string;
-    createdAt: string;
-    chainType: string;
-    walletType: string;
-    sendParams: {
-        token: string;
-        params: {
-            amount: string;
-            recipient: string;
-        };
-    };
-    onChain: {
-        txId: string;
-        explorerLink: string;
-    };
+const TxPage = () => {
+  return (
+    <div className="relative w-full ">
+       
+                <div className=''>
+
+<TransactionsPage/>
+                </div>
+</div>
+  )
 }
 
-export default function TransactionsPage() {
-    const { wallet, status } = useWallet();
-
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
-
-   const getWalletTransactions = async (walletLocator: string) => {
-  if (!walletLocator) return;
-
-  try {
-    const response = await fetch(`/api/transactions?wallet=${walletLocator}`);
-    const data = await response.json();
-
-    console.log({ data });
-
-    if (data?.transactions) {
-      setTransactions(data.transactions as Transaction[]);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-    useEffect(() => {
-        getWalletTransactions(wallet?.address ?? "");
-    }, [status]);
-
-    if (!transactions || transactions.length === 0) {
-        return (
-            <div className="p-6 bg-yellow-50 min-h-screen flex items-center justify-center w-full relative">
-<div className="absolute top-6 right-6 ">
-        <UserCard/>
-      </div>
-                <p className="text-yellow-700 text-xl font-semibold">
-                    No transactions available.
-                </p>
-            </div>
-        );
-    }
-
-    return (
-        <div className="p-6 bg-yellow-50 min-h-screen w-full relative">
-            <div className="absolute top-6 right-6 ">
-                    <UserCard/>
-                  </div>
-            <h1 className="text-3xl font-bold text-yellow-700 mb-6">
-                Transactions
-            </h1>
-            <div className="space-y-4">
-                {transactions.map((txn) => (
-                    <Card
-                        key={txn.id}
-                        className="border-yellow-300 shadow-sm hover:shadow-md transition p-4 flex justify-between items-center"
-                    >
-                        <div>
-                            <p className="text-lg font-semibold text-gray-900">
-                                {txn.sendParams.params.amount} {txn.sendParams.token}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                                Recipient: {txn.sendParams.params.recipient}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                                Created: {new Date(txn.createdAt).toLocaleDateString()}
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Badge className="capitalize bg-yellow-500 text-white">
-                                {txn.status.replace("-", " ")}
-                            </Badge>
-                            <Button
-                                asChild
-                                size="sm"
-                                className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
-                            >
-                                <a
-                                    href={txn.onChain.explorerLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <ExternalLink className="h-4 w-4 mr-1" /> View
-                                </a>
-                            </Button>
-                        </div>
-                    </Card>
-                ))}
-            </div>
-        </div>
-    );
-}
+export default TxPage

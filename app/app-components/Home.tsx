@@ -10,6 +10,8 @@ import { getWalletBalance } from "../actions/actions"
 import { WalletTypes } from "../types/types"
 import { useWallet } from "@crossmint/client-sdk-react-ui"
 import Link from "next/link"
+import CrossmintTransactionsTable from "./CrossmintTransactionsTable"
+import TransactionsPage from "./Transactions"
 
 const data = [
     { name: "1", value: 30000 },
@@ -30,15 +32,17 @@ const transactions = [
 
 
 
-export default function Home({ walletAddress }: { walletAddress?: string }) {
+export default function Home() {
+
+
 
     const [walletBalance, setWalletBalances] = React.useState<WalletTypes[] | null>(null);
 
     const { wallet, status } = useWallet();
 
 
-    const getWalletData = async () => {
-        console.log("Fetching wallet data for:", wallet?.address);
+    const getWalletData = async (address: string) => {
+        console.log("Fetching wallet data for:", address);
         const res = await fetch(`/api/wallet-balance?address=${wallet?.address}`);
         const data = await res.json();
         if (res.ok) {
@@ -55,9 +59,13 @@ export default function Home({ walletAddress }: { walletAddress?: string }) {
 
             return;
         } else {
-            getWalletData();
+            const address = wallet?.address || "";
+            getWalletData(address);
+    
         }
     }, [status]);
+
+
 
 
 
@@ -66,7 +74,6 @@ export default function Home({ walletAddress }: { walletAddress?: string }) {
     return (
         <div className="flex flex-col gap-6 p-6 bg-gray-50 min-h-screen w-full">
             {/* Top Section */}
-            {/* WalletState: {walletAddress} */}<br/>
             <div className="flex justify-between items-center w-full">
                 <div>
                     <p className="text-gray-500 text-sm">Total Balance</p>
@@ -108,16 +115,16 @@ export default function Home({ walletAddress }: { walletAddress?: string }) {
             {/* Action Buttons */}
             <div className="flex gap-4 justify-center">
                 <ActionButton icon={<Download size={24} />} label="Deposit" active />
-               <Link href={"/send"}>
-                <ActionButton icon={<Send size={24} />} label="Send" />
-               </Link>
-               
+                <Link href={"/send"}>
+                    <ActionButton icon={<Send size={24} />} label="Send" />
+                </Link>
+
                 <ActionButton icon={<Repeat size={24} />} label="Request" />
                 <ActionButton icon={<Upload size={24} />} label="Withdraw" />
             </div>
 
             {/* Growth + Activity Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+            <div className=" gap-6 w-full">
                 {/* Growth Chart */}
                 {/* <Card className="rounded-2xl shadow-sm">
           <CardHeader>
@@ -134,9 +141,11 @@ export default function Home({ walletAddress }: { walletAddress?: string }) {
             </ResponsiveContainer>
           </CardContent>
         </Card> */}
-
+                {/* {transactionsData.length > 0 && <CrossmintTransactionsTable transactions={transactionsData} />} */}
+                
+                <TransactionsPage/>
                 {/* Activity Table */}
-                <Card className="rounded-2xl shadow-sm w-full" >
+                {/* <Card className="rounded-2xl shadow-sm w-full" >
                     <CardHeader>
                         <CardTitle>Activity</CardTitle>
                     </CardHeader>
@@ -164,7 +173,7 @@ export default function Home({ walletAddress }: { walletAddress?: string }) {
                             ))}
                         </div>
                     </CardContent>
-                </Card>
+                </Card> */}
             </div>
         </div>
     )

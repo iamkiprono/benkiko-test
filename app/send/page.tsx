@@ -5,13 +5,16 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useWallet } from "@crossmint/client-sdk-react-ui"
 import { useState } from "react"
 import { toast } from "sonner"
 import UserCard from "../app-components/UserCard"
+import { useWallet, EVMWallet } from '@crossmint/client-sdk-react-ui';
+import Link from "next/link"
+
 export default function Transact() {
 
   const { wallet: crossmintWallet } = useWallet()
+
 
   const [tab, setTab] = useState<"send" | "receive">("send")
   const [wallet, setWallet] = useState(crossmintWallet?.address || "")
@@ -19,36 +22,71 @@ export default function Transact() {
   const [recipient, setRecipient] = useState("")
   const [amount, setAmount] = useState("")
   const [loading, setLoading] = useState(false);
+
+
+  // const transferToken = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const res = await fetch('/api/transfer', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         walletLocator: crossmintWallet?.address,
+  //         tokenLocator: `${token}`,
+  //         // check if email
+  //         recipient: recipient.includes("@") ? `email:${recipient}` : recipient.includes("+") ? `phone:${recipient}` : recipient,
+  //         signer: crossmintWallet?.address,
+  //         amount,
+  //         memo: { type: "text", value: "Hello, world!" },
+  //       }),
+  //     });
+
+  //     const data = await res.json();
+  //     if (!res.ok) {
+  //       throw new Error(data.error.message || 'Transfer failed');
+  //     }
+
+  //     toast.success('Transfer successful!');
+  //   } catch (error) {
+  //     setLoading(false);
+  //     toast.error(`Transfer failed: ${(error as Error).message}`);
+  //   }
+  // }
+
+
+  const { wallet: xMintWallet } = useWallet();
   const transferToken = async () => {
+    if (!crossmintWallet) {
+      toast.error("Please connect your wallet first.");
+      return;
+    }
+
     try {
       setLoading(true);
-      const res = await fetch('/api/transfer', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          walletLocator: crossmintWallet?.address,
-          tokenLocator: `chain:currency:${token}`,
-          // check if email
-          recipient: recipient.includes("@") ? `email:${recipient}` : recipient.includes("+") ? `phone:${recipient}` : recipient,
-          signer: crossmintWallet?.address,
-          amount,
-          memo: { type: "text", value: "Hello, world!" },
-        }),
-      });
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error.message || 'Transfer failed');
-      }
+      // amount in wei if using ETH
+      const resp = await xMintWallet?.send(recipient.includes("@") ? `email:${recipient}` : recipient, "usdc", amount);
 
-      toast.success('Transfer successful!');
+      console.log({ resp })
+
+      toast.success(
+        <div>
+          Transaction sent!{" "}
+          <Link href={"/transactions"}  className="underline text-blue-500">
+            View Transaction
+          </Link>
+        </div>
+      );
     } catch (error) {
+      console.error("Transaction failed:", error);
+      toast.error(`Transaction failed: ${(error as Error).message}`);
+    } finally {
       setLoading(false);
-      toast.error(`Transfer failed: ${(error as Error).message}`);
     }
-  }
+  };
+
 
 
 
@@ -107,20 +145,23 @@ export default function Transact() {
           </div> */}
 
           {/* Token Locator */}
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label>Token Locator</Label>
             <Select onValueChange={setToken}>
               <SelectTrigger className="py-6 text-base">
                 <SelectValue placeholder="Select token" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="evm">EVM</SelectItem>
+                <SelectItem value="base-sepolia">Base Sepolia</SelectItem>
+                <SelectItem value="base">Base </SelectItem>
                 <SelectItem value="usdt">USDT</SelectItem>
                 <SelectItem value="btc">Bitcoin (BTC)</SelectItem>
                 <SelectItem value="eth">Ethereum (ETH)</SelectItem>
                 <SelectItem value="bnb">BNB</SelectItem>
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
 
           {/* Recipient Locator */}
           <div className="space-y-2">
