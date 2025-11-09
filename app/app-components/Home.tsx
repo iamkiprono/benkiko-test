@@ -82,11 +82,16 @@ export default function Home() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <Button variant="default" className="bg-black text-white rounded-full">
+                    <Button asChild variant="default" className="bg-black text-white rounded-full">
+<Link href={"/deposit"}>
                         Deposit
+
+</Link>
                     </Button>
-                    <Button variant="default" className="bg-yellow-400 text-black rounded-full">
-                        Withdraw
+                    <Button asChild variant="default" className="bg-yellow-400 text-black rounded-full">
+                     <Link href={"/withdraw"}>
+                     Withdraw
+                     </Link>
                     </Button>
                     <div className="flex items-center gap-2 ml-4">
                         <Avatar>
@@ -114,13 +119,17 @@ export default function Home() {
 
             {/* Action Buttons */}
             <div className="flex gap-4 justify-center">
+                <Link href={"/deposit"}>
                 <ActionButton icon={<Download size={24} />} label="Deposit" active />
+                </Link>
                 <Link href={"/send"}>
                     <ActionButton icon={<Send size={24} />} label="Send" />
                 </Link>
 
                 <ActionButton icon={<Repeat size={24} />} label="Request" />
+                <Link href={"/withdraw"}>
                 <ActionButton icon={<Upload size={24} />} label="Withdraw" />
+                </Link>
             </div>
 
             {/* Growth + Activity Section */}

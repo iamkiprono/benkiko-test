@@ -1,0 +1,30 @@
+import React from 'react'
+import * as jsonwebtoken from 'jsonwebtoken';
+import { v4 as uuid } from 'uuid';
+
+
+
+const page = () => {
+
+  const token = jsonwebtoken.sign(
+    {
+      uid: uuid(),
+    },
+    process.env.SIGNATURE_SECRET!,
+    {
+      algorithm: 'HS256',
+    },
+ );
+
+  return (
+     <iframe
+        src={`https://sandbox-pay.fonbnk.com/?source=bd3X9Cgq&signature=${token}`}
+        width="100%"
+        height="500"
+        style={{ border: "none", borderRadius: "8px" }}
+        title="FonBonk"
+      />
+  )
+}
+
+export default page

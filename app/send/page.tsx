@@ -24,39 +24,11 @@ export default function Transact() {
   const [loading, setLoading] = useState(false);
 
 
-  // const transferToken = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const res = await fetch('/api/transfer', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         walletLocator: crossmintWallet?.address,
-  //         tokenLocator: `${token}`,
-  //         // check if email
-  //         recipient: recipient.includes("@") ? `email:${recipient}` : recipient.includes("+") ? `phone:${recipient}` : recipient,
-  //         signer: crossmintWallet?.address,
-  //         amount,
-  //         memo: { type: "text", value: "Hello, world!" },
-  //       }),
-  //     });
-
-  //     const data = await res.json();
-  //     if (!res.ok) {
-  //       throw new Error(data.error.message || 'Transfer failed');
-  //     }
-
-  //     toast.success('Transfer successful!');
-  //   } catch (error) {
-  //     setLoading(false);
-  //     toast.error(`Transfer failed: ${(error as Error).message}`);
-  //   }
-  // }
-
 
   const { wallet: xMintWallet } = useWallet();
+
+
+
   const transferToken = async () => {
     if (!crossmintWallet) {
       toast.error("Please connect your wallet first.");
@@ -66,15 +38,14 @@ export default function Transact() {
     try {
       setLoading(true);
 
-      // amount in wei if using ETH
-      const resp = await xMintWallet?.send(recipient.includes("@") ? `email:${recipient}` : recipient, "usdc", amount);
 
+      const resp = await xMintWallet?.send(recipient.includes("@") ? `email:${recipient}` : recipient, "usdc", amount);
       console.log({ resp })
 
       toast.success(
         <div>
           Transaction sent!{" "}
-          <Link href={"/transactions"}  className="underline text-blue-500">
+          <Link href={"/transactions"} className="underline text-blue-500">
             View Transaction
           </Link>
         </div>
@@ -95,6 +66,7 @@ export default function Transact() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold">Transact</h1>
+       
 
         <div className="flex items-center gap-3">
           {/* <div className="flex items-center gap-2">
