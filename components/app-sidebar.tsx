@@ -33,9 +33,9 @@ const items = [
   },
   {
     title: "Store",
-    url: "/swap",
+    url: "/store",
     icon: Store,
-  },
+  }
 
 ]
 
