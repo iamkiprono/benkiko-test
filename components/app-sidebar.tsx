@@ -1,4 +1,5 @@
-import { ArrowRightLeft, Calendar, ChevronUp, Contact, Home, Inbox, Search, Settings, Store, User2 } from "lucide-react"
+"use client"
+import { ArrowRightLeft, Calendar, ChevronUp, Contact, Home, Inbox, Search, Settings, Store, User, User2 } from "lucide-react"
 
 import {
   Sidebar,
@@ -13,6 +14,7 @@ import {
 } from "@/components/ui/sidebar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import Link from "next/link"
+import { useAuth } from "@crossmint/client-sdk-react-ui"
 
 // Menu items.
 const items = [
@@ -39,7 +41,10 @@ const items = [
 
 ]
 
+
+
 export function AppSidebar() {
+  const { login, logout, user, jwt, status } = useAuth();
   return (
     <Sidebar>
       <SidebarContent>
@@ -70,7 +75,7 @@ export function AppSidebar() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton>
-                    <User2 /> Username
+                    <User2 /> {user?.email}
                     <ChevronUp className="ml-auto" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
@@ -79,12 +84,14 @@ export function AppSidebar() {
                   className="w-[--radix-popper-anchor-width]"
                 >
                   <DropdownMenuItem>
-                    <span>Account</span>
+                    <span>
+                      <Link href={"/profile"}>Profile</Link>
+                    </span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  {/* <DropdownMenuItem>
                     <span>Billing</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  </DropdownMenuItem> */}
+                  <DropdownMenuItem onClick={logout}>
                     <span>Sign out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
