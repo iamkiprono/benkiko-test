@@ -1,30 +1,28 @@
-import React from 'react'
+
 import * as jsonwebtoken from 'jsonwebtoken';
 import { v4 as uuid } from 'uuid';
+import DepositIframe from '../app-components/DepositIframe';
 
 
 
-const page = () => {
+const DepositPage = () => {
+
+  
 
   const token = jsonwebtoken.sign(
     {
       uid: uuid(),
     },
-    process.env.SIGNATURE_SECRET!,
+   
+    process.env.SIGNATURE_SECRET as string,
     {
       algorithm: 'HS256',
     },
  );
 
   return (
-     <iframe
-        src={`https://sandbox-pay.fonbnk.com/?source=bd3X9Cgq&signature=${token}`}
-        width="100%"
-        height="500"
-        style={{ border: "none", borderRadius: "8px" }}
-        title="FonBonk"
-      />
+   <DepositIframe token={token}/>
   )
 }
 
-export default page
+export default DepositPage

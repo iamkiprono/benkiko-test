@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import MenuBar from './MenuBar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Loader2Icon } from 'lucide-react';
+import Link from 'next/link';
 
 const UserCard = () => {
   const { login, logout, user, jwt, status } = useAuth();
@@ -32,9 +33,11 @@ const UserCard = () => {
                 <AvatarFallback>{user.email?.split("")[0].toUpperCase()}</AvatarFallback>
               </Avatar>
             </MenuBar>
+            <Link href={"/profile"}>
             <Button className="bg-[var(--color-accent)] ">
               {user?.email}
             </Button>
+            </Link>
           </div>
 
         )
