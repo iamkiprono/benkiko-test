@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useWallet } from "@crossmint/client-sdk-react-ui";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { act, useEffect, useState } from "react";
 import UserCard from "../app-components/UserCard";
 
 import { CardContent } from "@/components/ui/card";
-import { ArrowDownRight, CheckCircle2, Clock, Loader2Icon, Send, XCircle } from "lucide-react";
+import { ArrowDown, ArrowDownRight, ArrowUp, CheckCircle2, Clock, Loader2Icon, Send, XCircle } from "lucide-react";
 import { Transactionz } from "../types/types";
 
 // Define types for transaction structure
@@ -30,11 +30,28 @@ interface Transaction {
     };
 }
 
+
+
+type Events = {
+    token_symbol: string;
+    transaction_hash: string;
+    to_address: string;
+    from_address: string;
+    timestamp: number;
+    amount: string;
+    type: string;
+}
+
+interface Activity {
+    events: Events[];
+}
+
 export default function TransactionsPage() {
     const { wallet, status } = useWallet();
 
     const [transactions, setTransactions] = useState<Transactionz[] | null>(null);
     const [selected, setSelected] = useState<Transactionz | null>(null)
+    const [activity, setActivity] = useState<Activity | null>(null);
 
     const getWalletTransactions = async (walletLocator: string) => {
         if (!walletLocator) return;
@@ -70,14 +87,25 @@ export default function TransactionsPage() {
             timeStyle: "short",
         })
 
+    const fetchTransactions = async () => {
+        try {
+            const activity = await wallet?.experimental_activity()
+            setActivity(activity as Activity);
+        } catch (error) {
+            console.error("Error fetching activity:", error);
+        }
+    }
+
+
     useEffect(() => {
         getWalletTransactions(wallet?.address ?? "");
+        fetchTransactions();
     }, [status]);
 
     if (transactions && transactions?.length === 0) {
         return (
             <div className="p-6 bg-yellow-50 min-h-screen flex items-center justify-center w-full relative">
-              
+
                 <p className="text-yellow-700 text-xl font-semibold">
                     No transactions available.
                 </p>
@@ -88,7 +116,7 @@ export default function TransactionsPage() {
     if (!transactions) {
         return <div className="flex justify-center">
             <div className="animate-spin">
-                <Loader2Icon/>
+                <Loader2Icon />
             </div>
         </div>
     }
@@ -97,13 +125,25 @@ export default function TransactionsPage() {
         return <div>Not selected yet</div>
     }
 
+    const formatAddress = (addr: string) => {
+        if (!addr) return "";
+        return `${addr.substring(0, 6)}...${addr.substring(addr.length - 4)}`;
+    };
+
+    const formatTimestamp = (ts: number) => {
+        return new Date(ts).toLocaleString();
+    };
+
+    const walletAddress = wallet?.address || "";
+
     return (
         <div className="flex w-full min-h-screen bg-white text-gray-900">
             {/* Transactions List */}
             <div className="flex-1 border-r border-gray-100 p-8 overflow-y-auto">
                 <h2 className="text-2xl font-semibold mb-6">Transactions</h2>
+
                 <div className="space-y-4">
-                    {transactions.map((tx) => (
+                    {/* {transactions.map((tx) => (
                         <Card
                             key={tx.id}
                             onClick={() => setSelected(tx)}
@@ -132,12 +172,77 @@ export default function TransactionsPage() {
                                 {formatDate(tx.createdAt)}
                             </span>
                         </Card>
-                    ))}
+                    ))} */}
+                    {activity?.events.map((event, index: number) => {
+                        const isIncoming =
+                            walletAddress &&
+                            event.to_address?.toLowerCase() === walletAddress.toLowerCase();
+
+                        return (
+                            <Card
+                                key={`${event.transaction_hash}-${index}`}
+                                className={`border ${index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                                    } shadow-sm`}
+                            >
+                                <CardContent className="flex justify-between items-center py-4">
+                                    {/* LEFT SIDE */}
+                                    <div className="flex items-start gap-3">
+                                        {/* Icon */}
+                                        <div
+                                            className={`w-10 h-10 rounded-full flex items-center justify-center ${isIncoming
+                                                ? "bg-green-100 text-green-600"
+                                                : "bg-blue-100 text-blue-600"
+                                                }`}
+                                        >
+                                            {isIncoming ? (
+                                                <ArrowDown size={16} />
+                                            ) : (
+                                                <ArrowUp size={16} />
+                                            )}
+                                        </div>
+
+                                        {/* Details */}
+                                        <div className="flex flex-col">
+                                            {/* Header */}
+                                            <div className="flex items-center gap-2">
+                                                <span className="font-semibold">
+                                                    {isIncoming ? "Received" : "Sent"}
+                                                </span>
+                                                <span className="text-xs text-gray-500">
+                                                    {formatTimestamp(event.timestamp)}
+                                                </span>
+                                            </div>
+
+                                            {/* Address */}
+                                            <span className="text-gray-600 text-sm">
+                                                {isIncoming
+                                                    ? `From ${formatAddress(event.from_address)}`
+                                                    : `To ${formatAddress(event.to_address)}`}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* RIGHT SIDE */}
+                                    <div className="text-right">
+                                        <span
+                                            className={`text-lg font-semibold ${isIncoming ? "text-green-600" : "text-blue-600"
+                                                }`}
+                                        >
+                                            {isIncoming ? "+" : "-"}${event.amount}
+                                        </span>
+                                        <div className="text-sm text-gray-500">
+                                            {event.token_symbol}
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        );
+                    })}
                 </div>
             </div>
 
             {/* Transaction Details */}
-            <div className="w-[35%] bg-gray-50 p-10 flex flex-col items-center overflow-y-auto">
+            {/* <div className="w-[35%] bg-gray-50 p-10 flex flex-col items-center overflow-y-auto">
                 {getStatusIcon(selected?.status)}
 
                 <h2
@@ -215,7 +320,7 @@ export default function TransactionsPage() {
                         )}
                     </CardContent>
                 </Card>
-            </div>
+            </div> */}
         </div>
     );
 }

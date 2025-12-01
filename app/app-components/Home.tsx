@@ -119,8 +119,8 @@ export default function Home() {
 
             {/* Action Buttons */}
             <div className="flex gap-4 justify-center">
-                <Link href={"/deposit"}>
-                <ActionButton icon={<Download size={24} />} label="Deposit" active />
+                <Link className="cursor-pointer" href={"/deposit"}>
+                <ActionButton  icon={<Download size={24} />} label="Deposit" active />
                 </Link>
                 <Link href={"/send"}>
                     <ActionButton icon={<Send size={24} />} label="Send" />
