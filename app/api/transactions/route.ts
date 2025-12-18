@@ -10,7 +10,7 @@ console.log({walletLocator})
 
   try {
     const response = await fetch(
-      `https://staging.crossmint.com/api/2025-06-09/wallets/${walletLocator}/transactions`,
+      `${process.env.NEXT_PUBLIC_CROSSMINT_STAGING_API}/api/2025-06-09/wallets/${walletLocator}/transactions`,
       {
         method: "GET",
         headers: {
