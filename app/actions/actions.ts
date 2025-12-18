@@ -7,7 +7,7 @@ export const getWalletBalance = async (address: string) => {
   console.log("Fetch URL:", url);
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_CROSSMINT_STAGING_API}/2025-06-09/wallets/${
+      `${process.env.NEXT_PUBLIC_CROSSMINT_STAGING_API}/api/2025-06-09/wallets/${
         address ?? ""
       }/balances?tokens=usdc`,
       {

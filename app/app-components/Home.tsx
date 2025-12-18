@@ -43,6 +43,10 @@ export default function Home() {
 
     const getWalletData = async (address: string) => {
         console.log("Fetching wallet data for:", address);
+        if (!address) {
+            console.error("No wallet address provided");
+            return;
+        }
         const res = await fetch(`/api/wallet-balance?address=${wallet?.address}`);
         const data = await res.json();
         if (res.ok) {

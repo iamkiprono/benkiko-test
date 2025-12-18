@@ -14,13 +14,17 @@ export async function GET(req: Request) {
     );
   }
 
-  const url = `${process.env.NEXT_PUBLIC_CROSSMINT_STAGING_API}2025-06-09/wallets/${address}/balances?tokens=usdc`;
+  const url = `${process.env.NEXT_PUBLIC_CROSSMINT_STAGING_API}/api/2025-06-09/wallets/${address}/balances?tokens=usdc`;
   console.log("Fetch URL:", url);
 
   try {
+    if(!address){
+      return
+    }
     const res = await fetch(url, {
       headers: {
         "x-api-key": process.env.NEXT_SERVER_CROSSMINT_API_KEY ?? "",
+        "Content-Type": "application/json"
       },
     });
 
@@ -36,7 +40,8 @@ export async function GET(req: Request) {
     console.error("Error fetching wallet balance:", error);
     return NextResponse.json(
       { success: false, error: (error as Error).message },
-      { status: 500 }
+      { status: 500 },
+      
     );
   }
 }
