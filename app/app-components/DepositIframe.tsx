@@ -5,11 +5,15 @@ import React from 'react'
 const DepositIframe = ({token}:{token: string}) => {
     const wallet = useWallet().wallet
 
- const Source_param = "bd3X9Cgq"
+ const Source_param = process.env.NEXT_PUBLIC_SOURCE_PARAM;
+
+   const url =    `https://${process.env.NEXT_PUBLIC_ENVIRONMENT === "dev" ? "sandbox-" : ""}pay.fonbnk.com/wallet?source=${Source_param}&network=BASE&asset=USDC&signature=${token}&amount=1&currency=crypto&paymentChannel=mpesa&countryIsoCode=KE&wallet=${wallet?.address}&freezeWallet=true`
+
+   console.log("Deposit URL:", url);
 
   return (
      <iframe
-        src={`https://sandbox-pay.fonbnk.com/wallet?source=${Source_param}&network=BASE&asset=USDC&signature=${token}&amount=1&currency=crypto&paymentChannel=mpesa&countryIsoCode=KE&wallet=${wallet?.address}&freezeWallet=true`}
+        src={url}
         // src={`https://sandbox-pay.fonbnk.com/?source=bd3X9Cgq&signature=${token}`}
         width="100%"
         height="500"

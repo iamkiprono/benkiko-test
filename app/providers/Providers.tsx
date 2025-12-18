@@ -13,7 +13,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
                 <CrossmintWalletProvider
                 
                     createOnLogin={{
-                        chain: "base-sepolia",
+                        chain: "base",
                         signer: {
                             type: "email",
                         },
