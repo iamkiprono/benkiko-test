@@ -14,7 +14,7 @@ export async function GET(req: Request) {
     );
   }
 
-  const url = `${process.env.NEXT_PUBLIC_CROSSMINT_STAGING_API}/2025-06-09/wallets/${address}/balances?tokens=usdc`;
+  const url = `${process.env.NEXT_PUBLIC_CROSSMINT_STAGING_API}2025-06-09/wallets/${address}/balances?tokens=usdc`;
   console.log("Fetch URL:", url);
 
   try {
