@@ -14,9 +14,9 @@ async function getCollections() {
       `${process.env.NEXT_SERVER_CROSSMINT_API_KEY}/api/2022-06-09/collections/`,
       {
         method: 'GET',
-        // @ts-expect-error no type
+
         headers: {
-          'X-API-KEY': process.env.NEXT_SERVER_CROSSMINT_API_KEY,
+          'X-API-KEY': process.env.NEXT_SERVER_CROSSMINT_API_KEY??"",
           "Content-Type": "application/json"
         }
       }
@@ -43,7 +43,7 @@ export default async function NftStore() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
         {/* @ts-expect-error no type */}
 
-        {gener.results.map((item: unknow) => (
+        {gener?.results?.map((item: unknow) => (
           <Card key={item.id} className="rounded-2xl shadow-sm border border-gray-200 bg-white hover:shadow-md transition">
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-gray-800">{item.metadata.name}</CardTitle>
