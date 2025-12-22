@@ -7,6 +7,9 @@ import { Separator } from "@/components/ui/separator";
 import { createCheckoutSession } from "@/app/actions/actions";
 import { toast } from "sonner";
 import { redirect, useSearchParams } from "next/navigation";
+import {useState} from 'react'
+import { ArrowDown, ArrowDownRight, ArrowUp, CheckCircle2, Clock, Loader2Icon, Send, XCircle } from "lucide-react";
+
 
 export default function CrossmintCheckout({
     params
@@ -17,22 +20,26 @@ export default function CrossmintCheckout({
 
     const name = searchParams.get('name')
 
+    const [loading, setLoading]=useState(false)
     return (
         <form className="w-full" onSubmit={async (e) => {
             e.preventDefault();
+            setLoading(true)
             const formData = new FormData(e.currentTarget);
             console.log({ arams: await params })
-
+            
             formData.append("slug", (await params).slug);
             const res = await createCheckoutSession(formData);
-
+            
             if (res?.error) {
                 console.error("Error creating checkout session:", res?.error);
                 toast.error("Error creating checkout session: " + res?.error);
+                setLoading(false)
             } else {
                 console.log("Checkout session created successfully:", res.data);
                 toast.success("Checkout session created successfully!");
                 redirect(`/store/checkout/success/${res.data.order.orderId}`);
+                setLoading(false)
 
             }
         }}>
@@ -150,7 +157,9 @@ export default function CrossmintCheckout({
                                 </div>
 
                                 <Button className="mt-6 h-12 rounded-xl bg-yellow-400 text-yellow-900 font-semibold hover:bg-yellow-500 transition-colors">
-                                    Pay with Crossmint
+                              {!loading? "Pay with Crossmint":   <div className="animate-spin">
+                <Loader2Icon />
+            </div>}
                                 </Button>
                             </div>
                         </CardContent>
