@@ -11,7 +11,7 @@ const yellowButton = "bg-[var(--color-accent)] text-black";
 async function getCollections() {
   try {
     const res = await fetch(
-      `${process.env.NEXT_SERVER_CROSSMINT_API_KEY}/api/2022-06-09/collections/`,
+      `${process.env.NEXT_PUBLIC_CROSSMINT_STAGING_API}/api/2022-06-09/collections/`,
       {
         method: 'GET',
 
