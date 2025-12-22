@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     console.log({ walletLocator, tokenLocator, recipient, signer, amount, memo })
 
     // Build the target URL dynamically
-    const url = `https://staging.crossmint.com/api/2025-06-09/wallets/${walletLocator}/tokens/${tokenLocator}/transfers`;
+    const url = `${process.env.NEXT_SERVER_CROSSMINT_API_KEY}/api/2025-06-09/wallets/${walletLocator}/tokens/${tokenLocator}/transfers`;
 
     // Prepare request options
     const options = {

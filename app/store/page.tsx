@@ -11,7 +11,7 @@ const yellowButton = "bg-[var(--color-accent)] text-black";
 async function getCollections() {
   try {
     const res = await fetch(
-      'https://staging.crossmint.com/api/2022-06-09/collections/',
+      `${process.env.NEXT_SERVER_CROSSMINT_API_KEY}/api/2022-06-09/collections/`,
       {
         method: 'GET',
         // @ts-expect-error no type
