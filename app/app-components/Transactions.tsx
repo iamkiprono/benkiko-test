@@ -9,6 +9,7 @@ import UserCard from "../app-components/UserCard";
 import { CardContent } from "@/components/ui/card";
 import { ArrowDown, ArrowDownRight, ArrowUp, CheckCircle2, Clock, Loader2Icon, Send, XCircle } from "lucide-react";
 import { Transactionz } from "../types/types";
+import Link from "next/link";
 
 // Define types for transaction structure
 interface Transaction {
