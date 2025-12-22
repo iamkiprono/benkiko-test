@@ -16,7 +16,7 @@ async function getCollections() {
         method: 'GET',
 
         headers: {
-          'X-API-KEY': process.env.NEXT_SERVER_CROSSMINT_API_KEY??"",
+          'X-API-KEY': process.env.NEXT_SERVER_CROSSMINT_API_KEY ?? "",
           "Content-Type": "application/json"
         }
       }
@@ -44,9 +44,9 @@ export default async function NftStore() {
         {/* @ts-expect-error no type */}
 
         {gener?.results?.map((item: unknow) => (
-          <Card key={item.id} className="rounded-2xl shadow-sm border border-gray-200 bg-white hover:shadow-md transition">
+          <Card key={item.id ?? ""} className="rounded-2xl shadow-sm border border-gray-200 bg-white hover:shadow-md transition">
             <CardHeader>
-              <CardTitle className="text-lg font-semibold text-gray-800">{item.metadata.name}</CardTitle>
+              <CardTitle className="text-lg font-semibold text-gray-800">{item.metadata.name ?? ""}</CardTitle>
             </CardHeader>
             <CardContent>
               <img
@@ -54,8 +54,8 @@ export default async function NftStore() {
                 alt={item.metadata.name}
                 className="w-full h-52 object-cover rounded-xl mb-4"
               />
-              <p className="text-sm text-gray-600 mb-3">Price: {item.payments.price} {item.payments.currency}</p>
-              <Link href={`/store/checkout/${item.id}?name=${item.metadata.name}`} className="w-full h-full block">
+              <p className="text-sm text-gray-600 mb-3">Price: {item.payments.price ?? ""} {item.payments.currency ?? ""}</p>
+              <Link href={`/store/checkout/${item.id}?name=${item.metadata.name ?? ""}`} className="w-full h-full block">
                 <Button className={`${yellowButton} hover:bg-yellow-600 w-full rounded-xl py-2 font-medium cursor-pointer`}>
                   Buy Now
 
