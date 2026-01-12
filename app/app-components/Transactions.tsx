@@ -5,11 +5,12 @@ import { useWallet } from "@crossmint/client-sdk-react-ui";
 import clsx from "clsx";
 import { act, useEffect, useState } from "react";
 import UserCard from "../app-components/UserCard";
-
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import { CardContent } from "@/components/ui/card";
-import { ArrowDown, ArrowDownRight, ArrowUp, CheckCircle2, Clock, Loader2Icon, Send, XCircle } from "lucide-react";
+import { ArrowDown, ArrowDownRight, ArrowUp, CheckCircle2, Clock, Loader2Icon, Send, XCircle, Copy } from "lucide-react";
 import { Transactionz } from "../types/types";
 import Link from "next/link";
+import { toast } from "sonner"
 
 // Define types for transaction structure
 interface Transaction {
@@ -53,6 +54,10 @@ export default function TransactionsPage() {
     const [transactions, setTransactions] = useState<Transactionz[] | null>(null);
     const [selected, setSelected] = useState<Transactionz | null>(null)
     const [activity, setActivity] = useState<Activity | null>(null);
+  const [copied, setCopied] = useState(false);
+        const [value, setValue] = useState('');
+
+
 
     const getWalletTransactions = async (walletLocator: string) => {
         if (!walletLocator) return;
@@ -137,12 +142,15 @@ export default function TransactionsPage() {
 
     const walletAddress = wallet?.address || "";
 
+
     return (
         <div className="flex w-full min-h-screen bg-white text-gray-900">
             {/* Transactions List */}
             <div className="flex-1 border-r border-gray-100 p-8 overflow-y-auto">
+           
                 <h2 className="text-2xl font-semibold mb-6">Transactions</h2>
-
+ 
+      
                 <div className="space-y-4">
                     {/* {transactions.map((tx) => (
                         <Card
@@ -225,6 +233,14 @@ export default function TransactionsPage() {
 
                                     {/* RIGHT SIDE */}
                                     <div className="text-right">
+                                        {/* copy transaction hash button */}
+                                     <CopyToClipboard
+                                            text={event.transaction_hash}
+            onCopy={() => {setCopied(true)
+            toast.success("Transaction hash copied")}
+        }    
+                                        ><Copy /> 
+                                            </CopyToClipboard>
                                         <span
                                             className={`text-lg font-semibold ${isIncoming ? "text-green-600" : "text-blue-600"
                                                 }`}

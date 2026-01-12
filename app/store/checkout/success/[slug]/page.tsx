@@ -6,8 +6,11 @@ import { Order } from "./types";
 import Link from "next/link";
 
 export default async function CrossmintSuccessPage({ params }: { params: { slug: string } }) {
+const param = await params;
+const slug = param.slug;
+
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_CROSSMINT_STAGING_API}/api/2022-06-09/orders/${params.slug}`,
+    `${process.env.NEXT_PUBLIC_CROSSMINT_STAGING_API}/api/2022-06-09/orders/${slug}`,
     {
       headers: {
         "X-API-KEY": process.env.NEXT_SERVER_CROSSMINT_API_KEY ?? "",

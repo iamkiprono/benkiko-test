@@ -52,7 +52,7 @@ export const createCheckoutSession = async (formData: FormData) => {
       },
       body: JSON.stringify({
         payment: {
-          method: "base",
+          method: "base-sepolia",
           currency: "usdc",
           receiptEmail: "jsmith@example.com",
           // payerAddress: "<string>",

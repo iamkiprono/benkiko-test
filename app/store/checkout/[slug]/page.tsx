@@ -7,30 +7,64 @@ import { Separator } from "@/components/ui/separator";
 import { createCheckoutSession } from "@/app/actions/actions";
 import { toast } from "sonner";
 import { redirect, useSearchParams } from "next/navigation";
-import {useState} from 'react'
+import { useState, useEffect } from 'react'
 import { ArrowDown, ArrowDownRight, ArrowUp, CheckCircle2, Clock, Loader2Icon, Send, XCircle } from "lucide-react";
-
+import { useWallet } from "@crossmint/client-sdk-react-ui";
+import { WalletTypes } from "@/app/types/types";
 
 export default function CrossmintCheckout({
     params
 }: {
     params: Promise<{ slug: string }>
 }) {
+    const [walletBalance, setWalletBalances] = useState<WalletTypes[] | null>(null);
+    const wallet = useWallet()
+
+    const getWalletData = async (address: string) => {
+        console.log("Fetching wallet data for:", address);
+        if (!address) {
+            console.error("No wallet address provided");
+            return;
+        }
+        const res = await fetch(`/api/wallet-balance?address=${wallet?.wallet?.address}`);
+        const data = await res.json();
+        if (res.ok) {
+            setWalletBalances(data.data);
+            console
+        } else {
+            // alert(data.error)
+            console.error("Error fetching wallet balance:", data.error);
+        }
+    }
+
+
     const searchParams = useSearchParams()
 
     const name = searchParams.get('name')
+    const price = searchParams.get('price')
 
-    const [loading, setLoading]=useState(false)
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+
+        getWalletData(wallet?.wallet?.address || "")
+    }, [])
+
+    if (walletBalance && Number(walletBalance[0]?.amount) < Number(price)) {
+        return <div>You have insufficient funds </div>
+    }
+
+
     return (
         <form className="w-full" onSubmit={async (e) => {
             e.preventDefault();
             setLoading(true)
             const formData = new FormData(e.currentTarget);
             console.log({ arams: await params })
-            
+
             formData.append("slug", (await params).slug);
             const res = await createCheckoutSession(formData);
-            
+
             if (res?.error) {
                 console.error("Error creating checkout session:", res?.error);
                 toast.error("Error creating checkout session: " + res?.error);
@@ -103,33 +137,33 @@ export default function CrossmintCheckout({
                                         <Input name="state" placeholder="Nakuru" />
                                     </div>
                                     <div className="space-y-2">
-  <Label>Country</Label>
-  <select
-    name="country"
-    defaultValue="KE"
-    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm
+                                        <Label>Country</Label>
+                                        <select
+                                            name="country"
+                                            defaultValue="KE"
+                                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm
                focus-visible:outline-none focus-visible:ring-2
                focus-visible:ring-yellow-400 focus-visible:ring-offset-2"
-  >
-    <option value="">Select country</option>
+                                        >
+                                            <option value="">Select country</option>
 
-    {/* Africa */}
-    <option value="KE">Kenya</option>
-    <option value="UG">Uganda</option>
-    <option value="TZ">Tanzania</option>
-    <option value="RW">Rwanda</option>
-    <option value="NG">Nigeria</option>
-    <option value="GH">Ghana</option>
-    <option value="ZA">South Africa</option>
+                                            {/* Africa */}
+                                            <option value="KE">Kenya</option>
+                                            <option value="UG">Uganda</option>
+                                            <option value="TZ">Tanzania</option>
+                                            <option value="RW">Rwanda</option>
+                                            <option value="NG">Nigeria</option>
+                                            <option value="GH">Ghana</option>
+                                            <option value="ZA">South Africa</option>
 
-    {/* International */}
-    <option value="US">United States</option>
-    <option value="GB">United Kingdom</option>
-    <option value="CA">Canada</option>
-    <option value="DE">Germany</option>
-    <option value="FR">France</option>
-  </select>
-</div>
+                                            {/* International */}
+                                            <option value="US">United States</option>
+                                            <option value="GB">United Kingdom</option>
+                                            <option value="CA">Canada</option>
+                                            <option value="DE">Germany</option>
+                                            <option value="FR">France</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
 
@@ -149,7 +183,7 @@ export default function CrossmintCheckout({
                                     </div>
 
                                     <Separator />
-{/* 
+                                    {/* 
                                     <div className="flex justify-between text-lg font-bold text-yellow-900">
                                         <span>Total</span>
                                         <span>$—</span>
@@ -157,9 +191,9 @@ export default function CrossmintCheckout({
                                 </div>
 
                                 <Button className="mt-6 h-12 rounded-xl bg-yellow-400 text-yellow-900 font-semibold hover:bg-yellow-500 transition-colors">
-                              {!loading? "Pay with Crossmint":   <div className="animate-spin">
-                <Loader2Icon />
-            </div>}
+                                    {!loading ? "Pay with Crossmint" : <div className="animate-spin">
+                                        <Loader2Icon />
+                                    </div>}
                                 </Button>
                             </div>
                         </CardContent>

@@ -29,12 +29,30 @@ async function getCollections() {
   }
 }
 
+ const getWalletData = async (address: string) => {
+        console.log("Fetching wallet data for:", address);
+        if (!address) {
+            console.error("No wallet address provided");
+            return;
+        }
+        const res = await fetch(`/api/wallet-balance?address=${wallet?.address}`);
+        const data = await res.json();
+        if (res.ok) {
+            setWalletBalances(data.data);
+
+            console.log({amount:data.data[0]?.amount })
+            return data.data[0]?.amount
+        } else {
+            // alert(data.error)
+            console.error("Error fetching wallet balance:", data.error);
+        }
+    }
 
 export default async function NftStore() {
 
 
-
   const gener = await getCollections()
+  const bal = await getWalletData()
 
   return (
     <div className="min-h-screen w-full p-6 bg-gray-50">
@@ -55,7 +73,7 @@ export default async function NftStore() {
                 className="w-full h-52 object-cover rounded-xl mb-4"
               />
               <p className="text-sm text-gray-600 mb-3">Price: {!item?.payments ? "" : item?.payments?.price} {!item?.payments ? "" : item?.payments?.currency}</p>
-              <Link href={`/store/checkout/${item.id}?name=${item.metadata.name ?? ""}`} className="w-full h-full block">
+              <Link href={`/store/checkout/${item.id}?name=${item.metadata.name ?? ""}&price=${item.payments.price}`} className="w-full h-full block">
                 <Button className={`${yellowButton} hover:bg-yellow-600 w-full rounded-xl py-2 font-medium cursor-pointer`}>
                   Buy Now
 
