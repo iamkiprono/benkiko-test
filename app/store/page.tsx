@@ -33,6 +33,7 @@ async function getCollections() {
 export default async function NftStore() {
 
 
+
   const gener = await getCollections()
 
   return (
@@ -54,7 +55,7 @@ export default async function NftStore() {
                 className="w-full h-52 object-cover rounded-xl mb-4"
               />
               <p className="text-sm text-gray-600 mb-3">Price: {!item?.payments ? "" : item?.payments?.price} {!item?.payments ? "" : item?.payments?.currency}</p>
-              <Link href={`/store/checkout/${item.id}?name=${item.metadata.name ?? ""}&price=${item.payments.price}`} className="w-full h-full block">
+              <Link href={`/store/checkout/${item.id}?name=${item.metadata.name ?? ""}`} className="w-full h-full block">
                 <Button className={`${yellowButton} hover:bg-yellow-600 w-full rounded-xl py-2 font-medium cursor-pointer`}>
                   Buy Now
 
@@ -67,4 +68,3 @@ export default async function NftStore() {
     </div>
   );
 }
-
