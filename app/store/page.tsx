@@ -29,30 +29,11 @@ async function getCollections() {
   }
 }
 
- const getWalletData = async (address: string) => {
-        console.log("Fetching wallet data for:", address);
-        if (!address) {
-            console.error("No wallet address provided");
-            return;
-        }
-        const res = await fetch(`/api/wallet-balance?address=${wallet?.address}`);
-        const data = await res.json();
-        if (res.ok) {
-            setWalletBalances(data.data);
-
-            console.log({amount:data.data[0]?.amount })
-            return data.data[0]?.amount
-        } else {
-            // alert(data.error)
-            console.error("Error fetching wallet balance:", data.error);
-        }
-    }
 
 export default async function NftStore() {
 
 
   const gener = await getCollections()
-  const bal = await getWalletData()
 
   return (
     <div className="min-h-screen w-full p-6 bg-gray-50">
